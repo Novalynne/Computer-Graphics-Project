@@ -1,5 +1,7 @@
 import * as THREE from 'three';
+import './style.css';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // SCENA
 const scene = new THREE.Scene();
@@ -20,7 +22,6 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
-renderer.domElement.style.display = "block";
 document.body.appendChild(renderer.domElement);
 
 // GESTIONE RIDIMENSIONAMENTO FINESTRA
@@ -71,8 +72,47 @@ controls.target.set(0, 0, 0);
 controls.enableDamping = true;
 controls.update();
 
+// CARICAMENTO MODELLO 3D
+const loader = new GLTFLoader();
+loader.load(
+    'models/isometric_room/scene.gltf',
+    (gltf) => {
+        const model = gltf.scene;
+        model.traverse((child) => {
+            if (child.isMesh) {
+
+                // ABILITO LE OMBRE
+                child.castShadow = true;
+                child.receiveShadow = true;
+
+                // RIMUOVO IL PIANO ROSSO BASANDOMI SULLE DIMENSIONI DEL BOUNDING BOX
+                const box = new THREE.Box3().setFromObject(child);
+                const size = new THREE.Vector3();
+                box.getSize(size);
+
+                const isFloor =
+                    size.x > 10 &&     // molto largo
+                    size.z > 10 &&     // molto largo
+                    size.y < 1;        // molto piatto
+
+                if (isFloor) {
+                    child.visible = false;
+                    console.log("FLOOR RIMOSSO:", child.name);
+                }
+            }
+        });
+        model.scale.set(1, 1, 1);
+        model.position.set(0, 0, 0);
+        scene.add(model);
+    },
+    undefined,
+    (error) => {
+        console.error('Errore nel caricamento del modello:', error);
+    }
+);
+
 // CUBO
-const geometry = new THREE.BoxGeometry(1,1,1);
+const geometry = new THREE.BoxGeometry(0.5,0.5,0.5);
 const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 
 const cube = new THREE.Mesh(
@@ -83,19 +123,6 @@ const cube = new THREE.Mesh(
 cube.position.y = 1;
 cube.castShadow = true;
 scene.add(cube);
-
-// PIANO
-const planeGeometry = new THREE.PlaneGeometry(20, 20);
-const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
-
-const plane = new THREE.Mesh(
-    planeGeometry,
-    planeMaterial
-);
-
-plane.rotation.x = -Math.PI / 2;
-plane.receiveShadow = true;
-scene.add(plane);
 
 // ANIMAZIONE
 function animate() {

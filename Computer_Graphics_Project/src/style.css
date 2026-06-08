@@ -1,3 +1,17 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+}
+
+/* Global styles and variables for the Vite website
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -304,3 +318,4 @@ code {
     border-right-color: var(--border);
   }
 }
+*/
