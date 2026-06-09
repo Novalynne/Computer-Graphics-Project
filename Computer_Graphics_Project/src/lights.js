@@ -20,7 +20,7 @@ light.shadow.camera.top = 10;
 light.shadow.camera.bottom = -10;
 
 light.shadow.camera.near = 0.5;
-light.shadow.camera.far = 30;
+light.shadow.camera.far = 50;
 
 // AMBIENT LIGHT
 export const ambient = new THREE.AmbientLight(
