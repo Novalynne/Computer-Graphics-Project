@@ -11,6 +11,17 @@ canvas {
   display: block;
 }
 
+#shadowMapView {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  width: 200px;
+  height: 200px;
+  z-index: 100;
+  border: 1px solid white;
+  visibility: hidden;
+}
+
 /* Global styles and variables for the Vite website
 :root {
   --text: #6b6375;

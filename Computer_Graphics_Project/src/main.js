@@ -9,7 +9,7 @@ export const state = {
     showShadow: true,
 };
 
-import { scene, camera, renderer } from './scene.js';
+import {scene, camera, renderer} from './scene.js';
 import {light, ambient, helper} from './lights.js';
 import { createUI } from './ui.js';
 import {loadCube, loadModel} from "./models.js";
@@ -45,16 +45,44 @@ controls.target.set(0, 0, 0);
 controls.enableDamping = true;
 controls.update();
 
-// CUBE ANIMATION LOOP
-function animate() {
+// SHADOW MAP DEBUG VIEW PLANE
+const debugPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(5, 5),
+    new THREE.MeshBasicMaterial({ map: null })
+);
 
-    requestAnimationFrame(animate);
+debugPlane.position.set(5, -5, 0);
+debugPlane.scale.set(1, 1, 1);
+scene.add(debugPlane);
 
+// IF SHADOW MAP IS VISIBLE, UPDATE THE SHADOW MAP DEBUG VIEW
+function updateShadowMap() {
+
+    if (light.shadow.map) {
+        debugPlane.material.map = light.shadow.map.texture;
+        debugPlane.material.needsUpdate = false;
+    }
+}
+
+// ANIMATE CUBE LOOP
+function animateCube() {
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
+}
 
+// RENDERING LOOP
+function renderScene() {
+
+    requestAnimationFrame(renderScene);
+
+    animateCube();
     controls.update();
+
+
+    updateShadowMap();
+    debugPlane.visible = state.showShadowMap;
+
     renderer.render(scene, camera);
 }
 
-animate();
+renderScene();

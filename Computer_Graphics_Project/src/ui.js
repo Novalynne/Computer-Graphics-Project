@@ -43,7 +43,15 @@ export function createUI() {
 
     // TOGGLE SHADOW MAP
     gui.add(state, 'showShadowMap')
-        .name('Show Shadow Map');
+        .name('Show Shadow Map')
+        .onChange((v) => {
+            state.showShadowMap = v;
+            if(v){
+                document.getElementById('shadowMapView').style.visibility = 'visible';
+            }else{
+                document.getElementById('shadowMapView').style.visibility = 'hidden';
+            }
+        });
 }
 
 // UPDATE SHADOW CAMERA PROJECTION MATRIX AND HELPER
