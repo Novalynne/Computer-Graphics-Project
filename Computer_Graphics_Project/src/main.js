@@ -4,22 +4,29 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export const state = {
     bias: -0.0005,
+    pointLightBias: -0.01,
     showShadowMap: false,
+    showDirectionalLight: true,
+    showPointLight: false,
     showHelper: false,
+    showPointLightHelper: false,
     showShadow: true,
-    shadowType: 2 // 0: Basic, 1: PCF, 2: PCFSoft, 3: VSM
+    showPointLightShadow: true,
+    shadowType: THREE.PCFSoftShadowMap
 };
 
 import {scene, camera, renderer} from './scene.js';
 import {shadowMapPreviewCamera, shadowMapPreviewScene} from "./scene.js";
-import {light, ambient, helper} from './lights.js';
+import {light, ambient, pointLight, helper, pointLightHelper} from './lights.js';
 import { createUI } from './ui.js';
 import {loadCube, loadModel} from "./models.js";
 
 // ADD LIGHT AND HELPER TO SCENE
 scene.add(light);
+scene.add(pointLight);
 scene.add(ambient);
 scene.add(helper);
+scene.add(pointLightHelper);
 
 // LOAD MODEL AND CUBE
 loadModel(scene);
