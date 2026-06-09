@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 // SCENE
 export const scene = new THREE.Scene();
+export const shadowMapPreviewScene = new THREE.Scene();
 
 // CAMERA
 export const camera = new THREE.PerspectiveCamera(
@@ -13,6 +14,17 @@ export const camera = new THREE.PerspectiveCamera(
 
 camera.position.set(5, 5, 5);
 camera.lookAt(0, 0, 0);
+
+export const shadowMapPreviewCamera = new THREE.OrthographicCamera(
+    -1,
+    1,
+    1,
+    -1,
+    0.1,
+    10
+);
+shadowMapPreviewCamera.lookAt(0, 0, 0);
+shadowMapPreviewCamera.position.z = 1;
 
 // RENDERER
 export const renderer = new THREE.WebGLRenderer({

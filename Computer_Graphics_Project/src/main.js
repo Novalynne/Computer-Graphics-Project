@@ -10,6 +10,7 @@ export const state = {
 };
 
 import {scene, camera, renderer} from './scene.js';
+import {shadowMapPreviewCamera, shadowMapPreviewScene} from "./scene.js";
 import {light, ambient, helper} from './lights.js';
 import { createUI } from './ui.js';
 import {loadCube, loadModel} from "./models.js";
@@ -50,15 +51,14 @@ const debugPlane = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 5),
     new THREE.MeshBasicMaterial({ map: null })
 );
-
-debugPlane.position.set(5, -5, 0);
-debugPlane.scale.set(1, 1, 1);
-scene.add(debugPlane);
+debugPlane.position.set(0, -0.20, 0);
+debugPlane.scale.set(0.9,0.9,0.9);
+shadowMapPreviewScene.add(debugPlane);
 
 // IF SHADOW MAP IS VISIBLE, UPDATE THE SHADOW MAP DEBUG VIEW
 function updateShadowMap() {
 
-    if (light.shadow.map) {
+    if (light.shadow.map && light.shadow) {
         debugPlane.material.map = light.shadow.map.texture;
         debugPlane.material.needsUpdate = false;
     }
@@ -71,6 +71,8 @@ function animateCube() {
 }
 
 // RENDERING LOOP
+renderer.autoClear = false;
+
 function renderScene() {
 
     requestAnimationFrame(renderScene);
@@ -78,11 +80,27 @@ function renderScene() {
     animateCube();
     controls.update();
 
-
     updateShadowMap();
-    debugPlane.visible = state.showShadowMap;
 
+    renderer.clear();
+
+    // MAIN SCENE
     renderer.render(scene, camera);
+
+    // SHADOW MAP SCENE
+    if (state.showShadowMap) {
+
+        renderer.clearDepth();
+
+        renderer.setViewport(10, 10, 400, 400);
+        renderer.setScissor(10, 10, 400, 400);
+        renderer.setScissorTest(true);
+
+        renderer.render(shadowMapPreviewScene, shadowMapPreviewCamera);
+
+        renderer.setScissorTest(false);
+        renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+    }
 }
 
 renderScene();

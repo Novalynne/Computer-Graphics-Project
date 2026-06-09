@@ -14,12 +14,18 @@ canvas {
 #shadowMapView {
   position: fixed;
   bottom: 10px;
-  left: 10px;
-  width: 200px;
-  height: 200px;
+  left: 9px;
+  width: 400px;
+  height: 400px;
   z-index: 100;
-  border: 1px solid white;
+  border: 2px solid red;
   visibility: hidden;
+}
+
+#shadowMapView canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 /* Global styles and variables for the Vite website
