@@ -35,7 +35,7 @@ export const pointLight = new THREE.PointLight(
     3
 );
 
-pointLight.position.set(0, 0, 0);
+pointLight.position.set(0, 1, 0);
 pointLight.castShadow = true;
 pointLight.visible = false;
 
