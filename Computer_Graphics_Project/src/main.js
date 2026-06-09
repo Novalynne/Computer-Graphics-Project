@@ -7,6 +7,7 @@ export const state = {
     showShadowMap: false,
     showHelper: false,
     showShadow: true,
+    shadowType: 2 // 0: Basic, 1: PCF, 2: PCFSoft, 3: VSM
 };
 
 import {scene, camera, renderer} from './scene.js';
@@ -60,7 +61,6 @@ function updateShadowMap() {
 
     if (light.shadow.map && light.shadow) {
         debugPlane.material.map = light.shadow.map.texture;
-        debugPlane.material.needsUpdate = false;
     }
 }
 

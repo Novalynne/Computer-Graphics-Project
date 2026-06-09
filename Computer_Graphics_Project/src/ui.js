@@ -1,8 +1,11 @@
 import GUI from 'lil-gui';
+import * as THREE from "three";
 
 // GET LIGHT, STATE
 import { state } from './main.js';
 import { light, helper } from './lights.js';
+import {renderer} from "./scene.js";
+
 
 export function createUI() {
 
@@ -41,6 +44,12 @@ export function createUI() {
             light.castShadow = v;
         });
 
+    // SHADOW MAP TYPE
+    gui.add(state, 'shadowType', shadowTypes)
+        .onChange(value => {
+            renderer.shadowMap.type = value;
+        });
+
     // TOGGLE SHADOW MAP
     gui.add(state, 'showShadowMap')
         .name('Show Shadow Map')
@@ -56,6 +65,14 @@ export function createUI() {
 
 // UPDATE SHADOW CAMERA PROJECTION MATRIX AND HELPER
 function updateShadowCamera() {
-    light.shadow.camera.updateProjectionMatrix();
+    light.shadow.camera.updateMatrix();
     helper.update();
+}
+
+// CHANGE SHADOW MAP TYPE
+const shadowTypes = {
+    Basic: THREE.BasicShadowMap,
+    PCF: THREE.PCFShadowMap,
+    PCFSoft: THREE.PCFSoftShadowMap,
+    VSM: THREE.VSMShadowMap
 }
