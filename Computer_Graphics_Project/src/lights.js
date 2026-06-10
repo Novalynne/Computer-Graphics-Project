@@ -37,7 +37,6 @@ export const pointLight = new THREE.PointLight(
 
 pointLight.position.set(0, 1, 0);
 pointLight.castShadow = true;
-pointLight.visible = false;
 
 // UPDATE BIAS TO CORRECT SHADOW ACNE
 pointLight.shadow.bias = -0.01;

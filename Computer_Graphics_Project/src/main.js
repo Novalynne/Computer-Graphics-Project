@@ -5,14 +5,21 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 export const state = {
     bias: -0.0005,
     pointLightBias: -0.01,
+
     showShadowMap: false,
+
+    shadowMapSource: 'Directional',
+
     showDirectionalLight: true,
-    showPointLight: false,
+    showPointLight: true,
+
     showHelper: false,
     showPointLightHelper: false,
+
     showShadow: true,
     showPointLightShadow: true,
-    shadowType: THREE.PCFSoftShadowMap
+
+    shadowType: THREE.PCFShadowMap
 };
 
 import {scene, camera, renderer} from './scene.js';
@@ -63,13 +70,51 @@ debugPlane.position.set(0, -0.20, 0);
 debugPlane.scale.set(0.9,0.9,0.9);
 shadowMapPreviewScene.add(debugPlane);
 
+const debugMesh = new THREE.Mesh(
+    new THREE.BoxGeometry(2, 2, 2),
+    new THREE.MeshBasicMaterial({
+        envMap: null
+    })
+);
+shadowMapPreviewScene.add(debugMesh);
+
 // IF SHADOW MAP IS VISIBLE, UPDATE THE SHADOW MAP DEBUG VIEW
-function updateShadowMap() {
+/*function updateShadowMap() {
 
     if (light.shadow.map && light.shadow) {
         debugPlane.material.map = light.shadow.map.texture;
     }
+}*/
+
+function updateShadowMap() {
+
+    let texture;
+    let env;
+
+    if (state.shadowMapSource === 'Directional' && light.shadow.map) {
+        debugMesh.visible = false;
+        debugPlane.visible = true;
+
+        texture = light.shadow.map.texture;
+
+        debugPlane.material.map = texture;
+        debugPlane.material.needsUpdate = true;
+    }
+
+    if (state.shadowMapSource === 'Point' && pointLight.shadow.map) {
+        debugMesh.visible = true;
+        debugPlane.visible = false;
+
+        const cubeRT = pointLight.shadow.map;
+
+        if (cubeRT) {
+
+            debugMesh.material.map = cubeRT.texture;
+            debugMesh.material.needsUpdate = true;
+        }
+    }
 }
+
 
 // ANIMATE CUBE LOOP
 function animateCube() {

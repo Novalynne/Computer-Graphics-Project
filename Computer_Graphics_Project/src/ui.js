@@ -102,11 +102,30 @@ export function createUI() {
 
     const shadowFolder = gui.addFolder('Shadow Settings');
 
+    const shadowTypes = {
+        Basic: THREE.BasicShadowMap,
+        PCF: THREE.PCFShadowMap,
+        VSM: THREE.VSMShadowMap
+    }
+
     shadowFolder.add(state, 'shadowType', shadowTypes)
         .name('Shadow Type')
         .onChange(value => {
             renderer.shadowMap.type = value;
         });
+
+    const note = document.createElement('div');
+    note.style.padding = '8px';
+    note.style.fontSize = '11px';
+    note.style.opacity = '0.8';
+    note.innerHTML = '⚠️ VSM shadow map not supported for PointLights';
+
+    shadowFolder.domElement.appendChild(note);
+
+    const shadowSources = {
+        Directional: 'Directional',
+        Point: 'Point'
+    };
 
     shadowFolder.add(state, 'showShadowMap')
         .name('Preview Shadow Map')
@@ -114,6 +133,9 @@ export function createUI() {
             document.getElementById('shadowMapView')
                 .style.visibility = v ? 'visible' : 'hidden';
         });
+
+    shadowFolder.add(state, 'shadowMapSource', shadowSources)
+        .name('Shadow Map Source');
 }
 
 // UPDATE SHADOW CAMERA MATRIX AND HELPER
@@ -128,10 +150,4 @@ function updatePointLightShadowCamera() {
     pointLightHelper.update();
 }
 
-// CHANGE SHADOW MAP TYPE
-const shadowTypes = {
-    Basic: THREE.BasicShadowMap,
-    PCF: THREE.PCFShadowMap,
-    PCFSoft: THREE.PCFSoftShadowMap,
-    VSM: THREE.VSMShadowMap
-}
+
