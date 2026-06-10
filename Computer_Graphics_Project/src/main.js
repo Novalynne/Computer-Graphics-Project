@@ -8,7 +8,7 @@ export const state = {
 
     showShadowMap: false,
 
-    shadowMapSource: 'Directional',
+    //shadowMapSource: 'Directional', // STATE FOR SELECTING WHICH SHADOW MAP TO SHOW IN THE DEBUG VIEW (DIRECTIONAL OR POINT)
 
     showDirectionalLight: true,
     showPointLight: true,
@@ -70,26 +70,31 @@ debugPlane.position.set(0, -0.20, 0);
 debugPlane.scale.set(0.9,0.9,0.9);
 shadowMapPreviewScene.add(debugPlane);
 
+/*
+// SHADOW MAP DEBUG VIEW MESH (FOR POINT LIGHTS, SHOWS A CUBE WITH THE CUBEMAP AS ENVIRONMENT MAP)
 const debugMesh = new THREE.Mesh(
-    new THREE.BoxGeometry(2, 2, 2),
-    new THREE.MeshBasicMaterial({
-        envMap: null
-    })
+    new THREE.BoxGeometry(2, 2),
+    new THREE.MeshBasicMaterial()
 );
-shadowMapPreviewScene.add(debugMesh);
+debugMesh.position.set(0, -0.20, 0);
+debugMesh.scale.set(0.9,0.9,0.9);
+shadowMapPreviewScene.add(debugMesh);*/
 
 // IF SHADOW MAP IS VISIBLE, UPDATE THE SHADOW MAP DEBUG VIEW
-/*function updateShadowMap() {
-
-    if (light.shadow.map && light.shadow) {
-        debugPlane.material.map = light.shadow.map.texture;
-    }
-}*/
-
 function updateShadowMap() {
 
     let texture;
-    let env;
+
+    if (light.shadow.map && light.shadow) {
+        texture = light.shadow.map.texture;
+        debugPlane.material.map = texture;
+    }
+}
+/*
+// AGGIORNA LA SHADOW MAP NELLA SCENA DI DEBUG IN BASE ALLA SORGENTE SELEZIONATA
+function updateShadowMap() {
+
+    let texture;
 
     if (state.shadowMapSource === 'Directional' && light.shadow.map) {
         debugMesh.visible = false;
@@ -107,13 +112,15 @@ function updateShadowMap() {
 
         const cubeRT = pointLight.shadow.map;
 
-        if (cubeRT) {
+        // 👇 scegli una faccia della cubemap
+        const faceIndex = 0;
+        const faceTexture = cubeRT.texture;
+        faceTexture.mapping = THREE.CubeReflectionMapping;
 
-            debugMesh.material.map = cubeRT.texture;
-            debugMesh.material.needsUpdate = true;
-        }
+        debugMesh.material.envMap = faceTexture;
+        debugMesh.material.needsUpdate = true;
     }
-}
+}*/
 
 
 // ANIMATE CUBE LOOP

@@ -122,20 +122,24 @@ export function createUI() {
 
     shadowFolder.domElement.appendChild(note);
 
+    /*
+    // SHADOW MAP SOURCE (DIRECTIONAL OR POINT LIGHT)
     const shadowSources = {
         Directional: 'Directional',
         Point: 'Point'
-    };
+    };*/
 
     shadowFolder.add(state, 'showShadowMap')
-        .name('Preview Shadow Map')
+        .name('Deph Shadow Map')
         .onChange(v => {
             document.getElementById('shadowMapView')
                 .style.visibility = v ? 'visible' : 'hidden';
         });
 
+    /*
+    // DROPDOW FOR SELECTING SHADOW MAP SOURCE (DIRECTIONAL OR POINT LIGHT)
     shadowFolder.add(state, 'shadowMapSource', shadowSources)
-        .name('Shadow Map Source');
+        .name('Shadow Map Source');*/
 }
 
 // UPDATE SHADOW CAMERA MATRIX AND HELPER
