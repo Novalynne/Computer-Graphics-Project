@@ -11,7 +11,7 @@ export const state = {
     //shadowMapSource: 'Directional', // STATE FOR SELECTING WHICH SHADOW MAP TO SHOW IN THE DEBUG VIEW (DIRECTIONAL OR POINT)
 
     showDirectionalLight: true,
-    showPointLight: true,
+    showPointLight: false,
 
     showHelper: false,
     showPointLightHelper: false,

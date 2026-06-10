@@ -12,12 +12,14 @@ export function createUI() {
 
     // ROOT FOLDER
     const lightsFolder = gui.addFolder('Lights');
+    lightsFolder.$title.style.color = '#31e1db';
 
     // ==================================================
     // DIRECTIONAL LIGHT
     // ==================================================
 
     const directionalFolder = lightsFolder.addFolder('Directional Light');
+    directionalFolder.$title.style.color = '#4fc3f7';
 
     directionalFolder.add(state, 'showDirectionalLight')
         .name('Enabled')
@@ -32,7 +34,7 @@ export function createUI() {
         });
 
     directionalFolder.add(state, 'showHelper')
-        .name('Shadow Helper')
+        .name('Directional Light Helper')
         .onChange(v => {
             helper.visible = v;
         });
@@ -58,8 +60,8 @@ export function createUI() {
     // POINT LIGHT
     // ==================================================
 
-    const pointFolder =
-        lightsFolder.addFolder('Point Light');
+    const pointFolder = lightsFolder.addFolder('Point Light');
+    pointFolder.$title.style.color = '#4fc3f7';
 
     pointFolder.add(state, 'showPointLight')
         .name('Enabled')
@@ -74,7 +76,7 @@ export function createUI() {
         });
 
     pointFolder.add(state, 'showPointLightHelper')
-        .name('Point Helper')
+        .name('Point Light Helper')
         .onChange(v => {
             pointLightHelper.visible = v;
         });
@@ -101,6 +103,7 @@ export function createUI() {
     // ==================================================
 
     const shadowFolder = gui.addFolder('Shadow Settings');
+    shadowFolder.$title.style.color = '#ff8a65';
 
     const shadowTypes = {
         Basic: THREE.BasicShadowMap,
