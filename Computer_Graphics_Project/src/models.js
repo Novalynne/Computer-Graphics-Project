@@ -27,7 +27,6 @@ export function loadModel(scene) {
                     child.visible = false;
                 }
             }
-
         });
 
         scene.add(model);
@@ -53,4 +52,29 @@ export function loadCube(scene) {
 
     return cube;
 }
+
+// SHADER MATERIAL TO SIMULATE GLASS DEPTH IN SHADOW MAP
+export const glassDepthMaterial = new THREE.ShaderMaterial({
+    vertexShader: `
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+    fragmentShader: `
+    uniform float uOpacity;
+
+    void main() {
+      // invece di bloccare tutta la luce:
+      gl_FragColor = vec4(0.3, 0.3, 0.3, 1.0);
+    }
+  `
+});
+
+export const glassMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x00ff00,
+    transmission: 1,
+    roughness: 0,
+    thickness: 0.5,
+    ior: 1.5,
+});
 

@@ -2,9 +2,11 @@ import GUI from 'lil-gui';
 import * as THREE from "three";
 
 // GET LIGHTS, STATE, HELPER, RENDERER
-import { state } from './main.js';
+import {cube} from './main.js';
+import {state, shadowState} from './state.js';
 import {light, helper, pointLightHelper, pointLight} from './lights.js';
 import {renderer} from "./scene.js";
+import {glassDepthMaterial, glassMaterial} from "./models.js";
 
 export function createUI() {
 
@@ -125,13 +127,6 @@ export function createUI() {
 
     shadowFolder.domElement.appendChild(note);
 
-    /*
-    // SHADOW MAP SOURCE (DIRECTIONAL OR POINT LIGHT)
-    const shadowSources = {
-        Directional: 'Directional',
-        Point: 'Point'
-    };*/
-
     shadowFolder.add(state, 'showShadowMap')
         .name('Deph Shadow Map')
         .onChange(v => {
@@ -139,10 +134,41 @@ export function createUI() {
                 .style.visibility = v ? 'visible' : 'hidden';
         });
 
-    /*
-    // DROPDOW FOR SELECTING SHADOW MAP SOURCE (DIRECTIONAL OR POINT LIGHT)
-    shadowFolder.add(state, 'shadowMapSource', shadowSources)
-        .name('Shadow Map Source');*/
+    // ==================================================
+    // CUBE MATERIAL TYPE
+    // ==================================================
+
+    const cubeFolder = gui.addFolder('Cube Material');
+    cubeFolder.$title.style.color = '#ffd365';
+
+    const materialTypes = {
+        Standard: new THREE.MeshStandardMaterial({ color: 0x00ff00 }),
+        Glass: glassMaterial,
+    }
+
+    const materialDepthTypes = {
+        Standard: new THREE.MeshDepthMaterial(),
+        Glass: glassDepthMaterial,
+    }
+
+    cubeFolder.add(state, 'cubeMaterial', materialTypes)
+        .onChange(value => {
+
+            cube.material = value;
+            cube.customDepthMaterial = materialDepthTypes[state.cubeMaterial];
+
+            if (value === "Glass") {
+
+                shadowState.intensity = 0.5;
+                shadowState.tint.set(0x66ff66);
+
+            } else {
+
+                shadowState.intensity = 1.0;
+                shadowState.tint.set(0x000000);
+            }
+
+        });
 }
 
 // UPDATE SHADOW CAMERA MATRIX AND HELPER
