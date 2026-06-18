@@ -19,8 +19,3 @@ export const state = {
 
     shadowType: THREE.PCFShadowMap
 };
-
-export const shadowState = {
-    intensity: 1.0,
-    tint: new THREE.Color(0x000000)
-};

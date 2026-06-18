@@ -68,7 +68,6 @@ function animateCube() {
     cube.rotation.y += 0.01;
 }
 
-
 // RENDERING LOOP
 renderer.autoClear = false;
 
