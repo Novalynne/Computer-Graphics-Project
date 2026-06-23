@@ -17,5 +17,6 @@ export const state = {
     showShadow: true,
     showPointLightShadow: true,
 
-    shadowType: THREE.PCFShadowMap
+    shadowType: THREE.PCFShadowMap,
+    shadowRadius: 1
 };

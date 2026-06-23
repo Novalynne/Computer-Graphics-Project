@@ -105,6 +105,13 @@ export function createUI() {
     const shadowFolder = gui.addFolder('Shadow Settings');
     shadowFolder.$title.style.color = '#ff8a65';
 
+    shadowFolder.add(state, 'shadowRadius', 1, 10)
+        .name('Shadow Radius')
+        .onChange(v => {
+            light.shadow.radius = v;
+            pointLight.shadow.radius = v;
+        });
+
     const shadowTypes = {
         Basic: THREE.BasicShadowMap,
         PCF: THREE.PCFShadowMap,

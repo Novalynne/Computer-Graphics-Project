@@ -8,6 +8,7 @@ import {shadowMapPreviewCamera, shadowMapPreviewScene} from "./scene.js";
 import {light, ambient, pointLight, helper, pointLightHelper} from './lights.js';
 import { createUI } from './ui.js';
 import {loadCube, loadModel} from "./models.js";
+import Stats from "./stats.js";
 
 // ADD LIGHT AND HELPER TO SCENE
 scene.add(light);
@@ -22,6 +23,13 @@ export const cube = loadCube(scene);
 
 // UI
 createUI();
+
+// TIMER AND STATS UI
+let timer, stats;
+timer = new THREE.Timer();
+timer.connect( document );
+stats = new Stats();
+document.body.appendChild(stats.dom);
 
 // RESIZE WINDOW
 window.addEventListener('resize', () => {
@@ -70,10 +78,15 @@ function animateCube() {
 
 // RENDERING LOOP
 renderer.autoClear = false;
+let lastTime = performance.now();
+let frames = 0;
 
 function renderScene() {
 
     requestAnimationFrame(renderScene);
+
+    timer.update();
+    stats.update();
 
     animateCube();
     controls.update();
