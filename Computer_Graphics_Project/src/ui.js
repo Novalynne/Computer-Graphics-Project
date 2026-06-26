@@ -27,22 +27,10 @@ export function createUI() {
             light.visible = v;
         });
 
-    directionalFolder.add(state, 'showShadow')
-        .name('Shadows')
-        .onChange(v => {
-            light.castShadow = v;
-        });
-
     directionalFolder.add(state, 'showHelper')
         .name('Directional Light Helper')
         .onChange(v => {
             helper.visible = v;
-        });
-
-    directionalFolder.add(state, 'bias', -0.001, 0.0002, 0.000001)
-        .name('Bias')
-        .onChange(v => {
-            light.shadow.bias = v;
         });
 
     const directionalPosition = directionalFolder.addFolder('Position');
@@ -69,22 +57,10 @@ export function createUI() {
             pointLight.visible = v;
         });
 
-    pointFolder.add(state, 'showPointLightShadow')
-        .name('Shadows')
-        .onChange(v => {
-            pointLight.castShadow = v;
-        });
-
     pointFolder.add(state, 'showPointLightHelper')
         .name('Point Light Helper')
         .onChange(v => {
             pointLightHelper.visible = v;
-        });
-
-    pointFolder.add(state, 'pointLightBias', -0.001, 0.0002, 0.000001)
-        .name('Bias')
-        .onChange(v => {
-            pointLight.shadow.bias = v;
         });
 
     const pointPosition = pointFolder.addFolder('Position');
@@ -105,11 +81,11 @@ export function createUI() {
     const shadowFolder = gui.addFolder('Shadow Settings');
     shadowFolder.$title.style.color = '#ff8a65';
 
-    shadowFolder.add(state, 'shadowRadius', 1, 10)
-        .name('Shadow Radius')
+    shadowFolder.add(state, 'bias', -0.001, 0.0002, 0.000001)
+        .name('Bias')
         .onChange(v => {
-            light.shadow.radius = v;
-            pointLight.shadow.radius = v;
+            light.shadow.bias = v;
+            pointLight.shadow.bias = v;
         });
 
     const shadowTypes = {
@@ -122,14 +98,9 @@ export function createUI() {
         .name('Shadow Type')
         .onChange(value => {
             renderer.shadowMap.type = value;
+            state.usePCF = value === THREE.PCFShadowMap;
+            state.useVSM = value === THREE.VSMShadowMap;
         });
-
-    const note = document.createElement('div');
-    note.style.padding = '8px';
-    note.style.fontSize = '11px';
-    note.style.opacity = '0.8';
-    note.innerHTML = '⚠️ VSM shadow map not supported for PointLights';
-    shadowFolder.domElement.appendChild(note);
 
     shadowFolder.add(state, 'showShadowMap')
         .name('Deph Shadow Map')

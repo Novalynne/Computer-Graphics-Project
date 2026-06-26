@@ -9,6 +9,7 @@ import {light, ambient, pointLight, helper, pointLightHelper} from './lights.js'
 import { createUI } from './ui.js';
 import {loadCube, loadModel} from "./models.js";
 import Stats from "./stats.js";
+import {shadowMap, lightCamera, depthMaterial, updateLightMatrix, lightMatrix} from "./shaders.js";
 
 // ADD LIGHT AND HELPER TO SCENE
 scene.add(light);
@@ -76,26 +77,53 @@ function animateCube() {
     cube.rotation.y += 0.01;
 }
 
+// FUNCTION WHERE THE 1° RENDER FROM THE POINT OF VIEW OF LIGHT IS DONE,
+// THE MATERIAL OF THE SCENE ARE UPDATED TO A DEDICATED SHADER MATERIAL THEN THE SCENE IS RENDERED FROM THE LIGHT CAMERA
+function renderShadowMap() {
+
+    renderer.setRenderTarget(shadowMap);
+    renderer.clear();
+
+    scene.overrideMaterial = depthMaterial;
+
+    renderer.render(scene, lightCamera);
+
+    scene.overrideMaterial = null;
+    renderer.setRenderTarget(null);
+
+}
+
 // RENDERING LOOP
 renderer.autoClear = false;
-let lastTime = performance.now();
-let frames = 0;
 
 function renderScene() {
 
     requestAnimationFrame(renderScene);
 
-    timer.update();
     stats.update();
 
     animateCube();
     controls.update();
 
+    // UPDATES OF LIGHT MATRIX, SHADER UNIFORMS AND SHADOWMAP TEXURE ON DEBUG PANEL
     updateShadowMap();
+    updateLightMatrix();
+    scene.traverse((obj) => {
+        if (obj.isMesh && obj.userData._shadowShader) {
+
+            obj.userData._shadowShader.uniforms.usePCF.value = state.usePCF;
+            obj.userData._shadowShader.uniforms.useVSM.value = state.useVSM;
+            obj.userData._shadowShader.uniforms.bias.value = state.bias;
+            obj.userData._shadowShader.uniforms.lightMatrix.value.copy(lightMatrix);
+        }
+    });
+
+    // 1° PASS: SHADOW MAP
+    renderShadowMap();
 
     renderer.clear();
 
-    // MAIN SCENE
+    // 2° PASS: MAIN SCENE
     renderer.render(scene, camera);
 
     // SHADOW MAP SCENE

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { applyShadowShader } from './shaders.js'
 
 // FUNCTION TO LOAD THE MODEL
 export function loadModel(scene) {
@@ -17,6 +18,8 @@ export function loadModel(scene) {
                 // add shadows to all meshes
                 child.castShadow = true;
                 child.receiveShadow = true;
+
+                applyShadowShader(child);
 
                 // remove red plane from scene
                 const box = new THREE.Box3().setFromObject(child);

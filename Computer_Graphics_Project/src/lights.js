@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {state} from "./state.js";
 
 // DIRECTIONAL LIGHT
 export const light = new THREE.DirectionalLight(
@@ -22,6 +23,7 @@ light.shadow.camera.bottom = -10;
 
 light.shadow.camera.near = 0.5;
 light.shadow.camera.far = 50;
+light.shadow.radius = 2.5;
 
 // AMBIENT LIGHT
 export const ambient = new THREE.AmbientLight(
@@ -46,6 +48,7 @@ pointLight.shadow.bias = -0.01;
 pointLight.shadow.mapSize.set(1024, 1024);
 pointLight.shadow.camera.near = 0.5;
 pointLight.shadow.camera.far = 50;
+pointLight.shadow.radius = 2.5
 
 // HELPER
 export const helper = new THREE.CameraHelper(light.shadow.camera);
