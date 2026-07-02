@@ -9,18 +9,12 @@ export const light = new THREE.DirectionalLight(
 
 light.position.set(5, 15, 10);
 light.castShadow = true;
-
-// UPDATE BIAS TO CORRECT SHADOW ACNE
 light.shadow.bias = -0.0005;
-
-// DIRECTIONAL LIGHT SHADOW MAP SETTINGS
 light.shadow.mapSize.set(4096, 4096);
-
 light.shadow.camera.left = -10;
 light.shadow.camera.right = 10;
 light.shadow.camera.top = 10;
 light.shadow.camera.bottom = -10;
-
 light.shadow.camera.near = 0.5;
 light.shadow.camera.far = 50;
 light.shadow.radius = 2.5;
@@ -40,11 +34,7 @@ export const pointLight = new THREE.PointLight(
 pointLight.position.set(0, 1, 0);
 pointLight.castShadow = true;
 pointLight.visible = false;
-
-// UPDATE BIAS TO CORRECT SHADOW ACNE
 pointLight.shadow.bias = -0.01;
-
-// POINT LIGHT SHADOW MAP SETTINGS
 pointLight.shadow.mapSize.set(1024, 1024);
 pointLight.shadow.camera.near = 0.5;
 pointLight.shadow.camera.far = 50;

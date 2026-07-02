@@ -60,7 +60,6 @@ debugPlane.position.set(0, -0.20, 0);
 debugPlane.scale.set(0.9,0.9,0.9);
 shadowMapPreviewScene.add(debugPlane);
 
-// IF SHADOW MAP IS VISIBLE, UPDATE THE SHADOW MAP DEBUG VIEW
 function updateShadowMap() {
 
     let texture;
@@ -105,7 +104,7 @@ function renderScene() {
     animateCube();
     controls.update();
 
-    // UPDATES OF LIGHT MATRIX, SHADER UNIFORMS AND SHADOWMAP TEXURE ON DEBUG PANEL
+    // UPDATES OF LIGHT MATRIX AND SHADER UNIFORMS
     updateShadowMap();
     updateLightMatrix();
     scene.traverse((obj) => {
