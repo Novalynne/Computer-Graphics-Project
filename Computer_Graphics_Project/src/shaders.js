@@ -19,13 +19,13 @@ export const lightCamera = new THREE.OrthographicCamera(
     0.1, 50
 );
 
-lightCamera.position.copy(light.position); //the camera has the same position as the light
+lightCamera.position.copy(light.shadow.camera.position); //the camera has the same position as the light
 lightCamera.lookAt(0, 0, 0);
 
 export const lightMatrix = new THREE.Matrix4();
 export function updateLightMatrix(){
 
-    lightCamera.position.copy(light.position);
+    lightCamera.position.copy(light.shadow.camera.position);
 
     lightCamera.lookAt(0,0,0);
 

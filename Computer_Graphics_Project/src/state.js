@@ -14,11 +14,7 @@ export const state = {
     showHelper: false,
     showPointLightHelper: false,
 
-    showShadow: true,
-    showPointLightShadow: true,
-
     shadowType: THREE.PCFShadowMap,
     usePCF: true,
-    useVSM: false,
-    shadowRadius: 1
+    useVSM: false
 };
